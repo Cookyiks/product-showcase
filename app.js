@@ -879,7 +879,11 @@ els.submitForm.addEventListener("submit", async (event) => {
         "https://fwbqimtkdbthhtmtmjfn.supabase.co/functions/v1/dingtalk-notify",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            apikey: supabase.anonKey,
+            Authorization: `Bearer ${supabase.anonKey}`
+          },
           body: JSON.stringify(payload)
         }
       );
