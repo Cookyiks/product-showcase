@@ -474,14 +474,22 @@ button {
   white-space: nowrap;
 }
 
-.multi-swatches {
-  gap: 10px;
+.select-color-button {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 16px;
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
-.multi-swatch.selected {
-  box-shadow:
-    0 0 0 2px #ffffff,
-    0 0 0 4px var(--ink);
+.select-color-button:hover {
+  background: #f2f3f5;
+  border-color: #aab0b8;
+  transform: translateY(-1px);
 }
 
 .selected-colors {

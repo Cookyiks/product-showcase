@@ -307,7 +307,7 @@ const state = {
 const els = {
   productList: document.getElementById("productList"),
   swatches: document.getElementById("swatches"),
-  multiSwatches: document.getElementById("multiSwatches"),
+  selectColorBtn: document.getElementById("selectColorBtn"),
   selectedColors: document.getElementById("selectedColors"),
   stageSwatches: document.querySelector(".stage-swatches"),
   stage: document.getElementById("stage"),
@@ -685,41 +685,6 @@ function textColorFor(hex) {
   return r * 0.299 + g * 0.587 + b * 0.114 > 170 ? "#17181c" : "#ffffff";
 }
 
-function renderMultiSwatches(product) {
-  els.multiSwatches.innerHTML = product.colors.map((color, index) => {
-    const selected = state.selectedColors.some((item) => item.name === color.name);
-    return `
-      <button
-        class="swatch multi-swatch${selected ? " selected" : ""}"
-        type="button"
-        style="--swatch: ${color.chip}"
-        data-color-index="${index}"
-        aria-label="${color.name}"
-        title="${color.name}"
-      ></button>
-    `;
-  }).join("");
-
-  els.multiSwatches.querySelectorAll(".multi-swatch").forEach((button) => {
-    button.addEventListener("click", () => {
-      const currentProduct = getProduct();
-      const color = currentProduct.colors[Number(button.dataset.colorIndex)];
-      const existing = state.selectedColors.findIndex((item) => item.name === color.name);
-      if (existing >= 0) {
-        state.selectedColors.splice(existing, 1);
-      } else {
-        state.selectedColors.push({
-          name: color.name,
-          hex: color.hexCode || color.body,
-          pantone: color.pantone || ""
-        });
-      }
-      renderMultiSwatches(currentProduct);
-      renderSelectedColors();
-    });
-  });
-}
-
 function renderSelectedColors() {
   els.selectedColors.innerHTML = state.selectedColors.map((item, index) => {
     const textColor = textColorFor(item.hex);
@@ -741,8 +706,6 @@ function renderSelectedColors() {
     button.addEventListener("click", () => {
       state.selectedColors.splice(Number(button.dataset.colorIndex), 1);
       renderSelectedColors();
-      const currentProduct = getProduct();
-      if (currentProduct) renderMultiSwatches(currentProduct);
     });
   });
 }
@@ -838,7 +801,6 @@ function render() {
   const product = getProduct();
   const color = getColor();
   renderSwatches(product);
-  renderMultiSwatches(product);
   renderSelectedColors();
   renderStage(product, color);
 }
@@ -918,6 +880,20 @@ els.submitForm.addEventListener("submit", async (event) => {
   } finally {
     els.submitBtn.disabled = false;
   }
+});
+
+els.selectColorBtn.addEventListener("click", () => {
+  const product = getProduct();
+  const color = getColor();
+  if (!product || !color) return;
+  const existing = state.selectedColors.findIndex((item) => item.name === color.name);
+  if (existing >= 0) return;
+  state.selectedColors.push({
+    name: color.name,
+    hex: color.hexCode || color.body,
+    pantone: color.pantone || ""
+  });
+  renderSelectedColors();
 });
 
 render();
