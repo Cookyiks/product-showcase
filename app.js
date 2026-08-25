@@ -814,9 +814,15 @@ els.submitForm.addEventListener("submit", async (event) => {
   els.submitBtn.disabled = true;
   els.submitStatus.textContent = "提交中...";
   try {
-    const response = await fetch("/api/submit", {
+    const supabase = window.SUPABASE_CONFIG;
+    const response = await fetch(`${supabase.url}/rest/v1/submissions`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        apikey: supabase.anonKey,
+        Authorization: `Bearer ${supabase.anonKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
       body: JSON.stringify(payload)
     });
     if (!response.ok) throw new Error(await response.text());
@@ -824,7 +830,7 @@ els.submitForm.addEventListener("submit", async (event) => {
     els.department.value = "";
     els.submitter.value = "";
   } catch (error) {
-    els.submitStatus.textContent = "提交失败：请通过服务器地址访问页面（如 http://localhost:3000）";
+    els.submitStatus.textContent = "提交失败，请稍后重试";
     console.error(error);
   } finally {
     els.submitBtn.disabled = false;
