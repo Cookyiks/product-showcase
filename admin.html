@@ -29,6 +29,10 @@
       font-size: 13px;
       cursor: pointer;
     }
+    .row-delete {
+      color: #a75c43;
+      padding: 6px 10px;
+    }
     .card {
       background: #ffffff;
       border: 1px solid #e6e8ec;
@@ -78,6 +82,7 @@
           <th>颜色</th>
           <th>潘通</th>
           <th>HEX</th>
+          <th>操作</th>
         </tr>
       </thead>
       <tbody id="rows"></tbody>
@@ -118,6 +123,7 @@
             <td>${escapeHtml(item.color)}</td>
             <td>${escapeHtml(item.pantone)}</td>
             <td>${escapeHtml(item.hex)}</td>
+            <td><button class="row-delete" type="button" data-id="${escapeHtml(item.id)}">删除</button></td>
           </tr>
         `).join("");
         empty.style.display = items.length ? "none" : "block";
@@ -134,6 +140,35 @@
     }
 
     document.getElementById("refresh").addEventListener("click", load);
+
+    rows.addEventListener("click", async (event) => {
+      const button = event.target.closest(".row-delete");
+      if (!button) return;
+      const id = button.dataset.id;
+      if (!window.confirm("确定删除这条记录吗？")) return;
+      const supabase = window.SUPABASE_CONFIG || {
+        url: "https://fwbqimtkdbthhtmtmjfn.supabase.co",
+        anonKey: "sb_publishable_djicWMs8Pcd48_mktiXAFg_o-ARbihw"
+      };
+      status.textContent = "删除中...";
+      try {
+        const response = await fetch(
+          `${supabase.url}/rest/v1/submissions?id=eq.${encodeURIComponent(id)}`,
+          {
+            method: "DELETE",
+            headers: {
+              apikey: supabase.anonKey,
+              Authorization: `Bearer ${supabase.anonKey}`
+            }
+          }
+        );
+        if (!response.ok) throw new Error(await response.text());
+        load();
+      } catch (error) {
+        status.textContent = `删除失败：${error.message}`;
+      }
+    });
+
     load();
   </script>
 </body>

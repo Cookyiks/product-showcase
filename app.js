@@ -874,6 +874,18 @@ els.submitForm.addEventListener("submit", async (event) => {
       body: JSON.stringify(payload)
     });
     if (!response.ok) throw new Error(await response.text());
+    try {
+      await fetch(
+        "https://fwbqimtkdbthhtmtmjfn.supabase.co/functions/v1/dingtalk-notify",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }
+      );
+    } catch (notifyError) {
+      console.error("DingTalk notify failed:", notifyError);
+    }
     els.submitStatus.textContent = "提交成功";
     els.department.value = "";
     els.submitter.value = "";
