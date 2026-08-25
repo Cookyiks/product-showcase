@@ -94,7 +94,10 @@
     async function load() {
       status.textContent = "加载中...";
       try {
-        const supabase = window.SUPABASE_CONFIG;
+        const supabase = window.SUPABASE_CONFIG || {
+          url: "https://fwbqimtkdbthhtmtmjfn.supabase.co",
+          anonKey: "sb_publishable_djicWMs8Pcd48_mktiXAFg_o-ARbihw"
+        };
         const response = await fetch(
           `${supabase.url}/rest/v1/submissions?select=*&order=timestamp.asc`,
           {

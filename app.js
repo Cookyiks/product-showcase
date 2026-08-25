@@ -814,7 +814,10 @@ els.submitForm.addEventListener("submit", async (event) => {
   els.submitBtn.disabled = true;
   els.submitStatus.textContent = "提交中...";
   try {
-    const supabase = window.SUPABASE_CONFIG;
+    const supabase = window.SUPABASE_CONFIG || {
+      url: "https://fwbqimtkdbthhtmtmjfn.supabase.co",
+      anonKey: "sb_publishable_djicWMs8Pcd48_mktiXAFg_o-ARbihw"
+    };
     const response = await fetch(`${supabase.url}/rest/v1/submissions`, {
       method: "POST",
       headers: {
@@ -830,7 +833,7 @@ els.submitForm.addEventListener("submit", async (event) => {
     els.department.value = "";
     els.submitter.value = "";
   } catch (error) {
-    els.submitStatus.textContent = "提交失败，请稍后重试";
+    els.submitStatus.textContent = `提交失败：${error.message || "未知错误"}`;
     console.error(error);
   } finally {
     els.submitBtn.disabled = false;
