@@ -687,10 +687,13 @@ function textColorFor(hex) {
 
 function renderSelectedColors() {
   els.selectedColors.innerHTML = state.selectedColors.map((item, index) => {
-    const textColor = textColorFor(item.hex);
     return `
-      <span class="selected-chip" style="background: ${item.hex}; color: ${textColor}">
-        <span>${item.name}</span>
+      <span
+        class="selected-chip"
+        style="background: ${item.hex}"
+        title="${item.name}"
+        aria-label="${item.name}"
+      >
         <button
           class="chip-remove"
           type="button"
