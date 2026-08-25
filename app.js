@@ -880,6 +880,7 @@ els.submitForm.addEventListener("submit", async (event) => {
         {
           method: "POST",
           headers: { "Content-Type": "text/plain" },
+          mode: "no-cors",
           body: JSON.stringify(payload)
         }
       );
