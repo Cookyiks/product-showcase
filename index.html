@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>产品配色</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="产品配色">
+      <span class="brand-mark" aria-hidden="true">L</span>
+      <span>产品配色</span>
+    </a>
+    <div class="topbar-note">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>2026 新品系列</span>
+    </div>
+  </header>
+
+  <main class="showcase">
+    <aside class="panel product-panel">
+      <div class="panel-heading">
+        <h2>产品系列</h2>
+        <span class="panel-hint">12 类</span>
+      </div>
+      <div class="product-list" id="productList"></div>
+      <div class="panel-foot">点击产品查看对应配色</div>
+    </aside>
+
+    <section class="stage" id="stage" aria-live="polite">
+      <div class="stage-top">
+        <span class="stage-label" id="stageModel">Air Curl 3.0</span>
+        <span class="stage-color">
+          <i id="stageChip" aria-hidden="true"></i>
+          <span class="stage-color-info">
+            <span id="stageColorName">雾粉</span>
+            <span id="stageRgb">RGB(231, 186, 195)</span>
+            <span id="stageHex">#E7BAC3</span>
+          </span>
+        </span>
+      </div>
+      <div class="stage-visual" id="stageVisual">
+        <button class="zoom-hint" id="zoomHint" type="button">点击放大</button>
+      </div>
+      <div class="stage-swatches">
+        <div class="swatch-row">
+          <span class="swatch-label">机身色块</span>
+          <div class="swatches" id="swatches" role="group" aria-label="选择机身颜色"></div>
+        </div>
+      </div>
+      <form class="submit-form" id="submitForm">
+        <div class="submit-fields">
+          <label>
+            <span>部门</span>
+            <input id="department" name="department" type="text" autocomplete="organization" required placeholder="请输入部门">
+          </label>
+          <label>
+            <span>提交人</span>
+            <input id="submitter" name="submitter" type="text" autocomplete="name" required placeholder="请输入提交人">
+          </label>
+        </div>
+        <button class="submit-button" id="submitBtn" type="submit">提交选择</button>
+        <span class="submit-status" id="submitStatus" role="status"></span>
+      </form>
+    </section>
+  </main>
+
+  <div class="zoom-modal" id="zoomModal" hidden>
+    <button class="zoom-close" id="zoomClose" type="button" aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
+    <div class="zoom-content" id="zoomContent"></div>
+  </div>
+
+  <template id="svg-curler">
+    <svg class="product-svg" viewBox="0 0 640 640" role="img" aria-label="自动卷发棒">
+      <defs>
+        <linearGradient id="ID-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--body-light)"></stop>
+          <stop offset="0.55" stop-color="var(--body)"></stop>
+          <stop offset="1" stop-color="var(--body-deep)"></stop>
+        </linearGradient>
+        <linearGradient id="ID-handle" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--body)"></stop>
+          <stop offset="1" stop-color="var(--body-deep)"></stop>
+        </linearGradient>
+        <linearGradient id="ID-shine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.5"></stop>
+          <stop offset="1" stop-color="#ffffff" stop-opacity="0"></stop>
+        </linearGradient>
+        <clipPath id="ID-clip">
+          <rect x="-170" y="-46" width="320" height="92" rx="46"></rect>
+        </clipPath>
+      </defs>
+      <ellipse cx="320" cy="510" rx="170" ry="30" fill="rgba(20,22,26,0.10)"></ellipse>
+      <circle cx="320" cy="330" r="222" fill="var(--tint)"></circle>
+      <circle cx="320" cy="330" r="242" fill="none" stroke="var(--body-deep)" stroke-opacity="0.16" stroke-width="2" stroke-dasharray="3 13"></circle>
+      <g transform="translate(320 330) rotate(-36)">
+        <g clip-path="url(#ID-clip)">
+          <rect x="-170" y="-46" width="320" height="92" rx="46" fill="url(#ID-body)"></rect>
+          <rect x="-170" y="-46" width="320" height="45" fill="url(#ID-shine)"></rect>
+          <rect x="-118" y="-52" width="10" height="104" fill="var(--body-deep)" opacity="0.14"></rect>
+          <rect x="-78" y="-52" width="10" height="104" fill="var(--body-deep)" opacity="0.10"></rect>
+          <rect x="92" y="-52" width="10" height="104" fill="var(--body-deep)" opacity="0.10"></rect>
+        </g>
+        <rect x="-214" y="-40" width="48" height="80" rx="20" fill="var(--metal)"></rect>
+        <rect x="-214" y="-40" width="48" height="80" rx="20" fill="url(#ID-shine)" opacity="0.28"></rect>
+        <path d="M -184 -38 L -170 -46 L -170 46 L -184 38 Z" fill="var(--body-deep)" opacity="0.22"></path>
+        <rect x="140" y="-44" width="28" height="88" rx="14" fill="var(--body-deep)"></rect>
+        <rect x="150" y="-33" width="104" height="66" rx="33" fill="url(#ID-handle)"></rect>
+        <rect x="150" y="-33" width="104" height="33" fill="url(#ID-shine)" opacity="0.3"></rect>
+        <rect x="184" y="-8" width="34" height="16" rx="8" fill="var(--body-deep)"></rect>
+        <rect x="190" y="-5" width="22" height="10" rx="5" fill="var(--accent)" opacity="0.92"></rect>
+        <ellipse cx="218" cy="0" rx="11" ry="20" fill="var(--accent)"></ellipse>
+        <ellipse cx="218" cy="-8" rx="6" ry="9" fill="#ffffff" opacity="0.35"></ellipse>
+        <path d="M 252 26 C 284 46 282 76 304 90" fill="none" stroke="var(--body-deep)" stroke-width="12" stroke-linecap="round"></path>
+        <path d="M 252 26 C 284 46 282 76 304 90" fill="none" stroke="var(--body)" stroke-width="6" stroke-linecap="round" opacity="0.75"></path>
+      </g>
+    </svg>
+  </template>
+
+  <template id="svg-flat">
+    <svg class="product-svg" viewBox="0 0 640 640" role="img" aria-label="直发板">
+      <defs>
+        <linearGradient id="ID-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--body-light)"></stop>
+          <stop offset="0.55" stop-color="var(--body)"></stop>
+          <stop offset="1" stop-color="var(--body-deep)"></stop>
+        </linearGradient>
+        <linearGradient id="ID-handle" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--body)"></stop>
+          <stop offset="1" stop-color="var(--body-deep)"></stop>
+        </linearGradient>
+        <linearGradient id="ID-shine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.5"></stop>
+          <stop offset="1" stop-color="#ffffff" stop-opacity="0"></stop>
+        </linearGradient>
+        <linearGradient id="ID-metal" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#f4f6f8"></stop>
+          <stop offset="0.5" stop-color="#d3d7dc"></stop>
+          <stop offset="1" stop-color="#b7bcc3"></stop>
+        </linearGradient>
+        <clipPath id="ID-clip-b"><rect x="130" y="290" width="340" height="80" rx="40"></rect></clipPath>
+        <clipPath id="ID-clip-t"><rect x="130" y="210" width="340" height="80" rx="40"></rect></clipPath>
+      </defs>
+      <ellipse cx="320" cy="500" rx="190" ry="30" fill="rgba(20,22,26,0.10)"></ellipse>
+      <circle cx="320" cy="330" r="222" fill="var(--tint)"></circle>
+      <circle cx="320" cy="330" r="242" fill="none" stroke="var(--body-deep)" stroke-opacity="0.16" stroke-width="2" stroke-dasharray="3 13"></circle>
+      <g transform="rotate(-8 320 330)">
+        <g clip-path="url(#ID-clip-b)">
+          <rect x="130" y="290" width="340" height="80" rx="40" fill="url(#ID-body)"></rect>
+          <rect x="130" y="290" width="340" height="38" fill="url(#ID-shine)" opacity="0.42"></rect>
+        </g>
+        <rect x="130" y="290" width="340" height="80" rx="40" fill="none" stroke="var(--body-deep)" stroke-opacity="0.28"></rect>
+        <rect x="142" y="304" width="316" height="52" rx="26" fill="url(#ID-metal)"></rect>
+        <rect x="142" y="304" width="316" height="52" rx="26" fill="none" stroke="#ffffff" stroke-opacity="0.5"></rect>
+        <path d="M 168 330 h 264" stroke="var(--body-deep)" stroke-opacity="0.22" stroke-width="3" stroke-dasharray="1 10" stroke-linecap="round"></path>
+        <g transform="rotate(-14 470 250)">
+          <g clip-path="url(#ID-clip-t)">
+            <rect x="130" y="210" width="340" height="80" rx="40" fill="url(#ID-body)"></rect>
+            <rect x="130" y="210" width="340" height="38" fill="url(#ID-shine)" opacity="0.42"></rect>
+          </g>
+          <rect x="130" y="210" width="340" height="80" rx="40" fill="none" stroke="var(--body-deep)" stroke-opacity="0.28"></rect>
+          <rect x="142" y="226" width="316" height="52" rx="26" fill="url(#ID-metal)"></rect>
+          <rect x="142" y="226" width="316" height="52" rx="26" fill="none" stroke="#ffffff" stroke-opacity="0.5"></rect>
+          <path d="M 168 252 h 264" stroke="var(--body-deep)" stroke-opacity="0.22" stroke-width="3" stroke-dasharray="1 10" stroke-linecap="round"></path>
+        </g>
+        <circle cx="470" cy="270" r="26" fill="var(--body-deep)"></circle>
+        <circle cx="470" cy="270" r="13" fill="var(--metal)"></circle>
+        <rect x="458" y="252" width="126" height="76" rx="38" fill="url(#ID-handle)"></rect>
+        <rect x="458" y="252" width="126" height="36" fill="url(#ID-shine)" opacity="0.26"></rect>
+        <rect x="484" y="274" width="48" height="22" rx="11" fill="var(--body-deep)"></rect>
+        <rect x="492" y="280" width="32" height="10" rx="5" fill="var(--accent)" opacity="0.9"></rect>
+        <circle cx="552" cy="285" r="12" fill="var(--accent)"></circle>
+        <circle cx="552" cy="281" r="5" fill="#ffffff" opacity="0.3"></circle>
+        <path d="M 580 316 C 606 330 602 366 626 384" fill="none" stroke="var(--body-deep)" stroke-width="12" stroke-linecap="round"></path>
+        <path d="M 580 316 C 606 330 602 366 626 384" fill="none" stroke="var(--body)" stroke-width="6" stroke-linecap="round" opacity="0.7"></path>
+      </g>
+    </svg>
+  </template>
+
+  <template id="svg-comb">
+    <svg class="product-svg" viewBox="0 0 640 640" role="img" aria-label="电动气垫梳">
+      <defs>
+        <linearGradient id="ID-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--body-light)"></stop>
+          <stop offset="0.55" stop-color="var(--body)"></stop>
+          <stop offset="1" stop-color="var(--body-deep)"></stop>
+        </linearGradient>
+        <linearGradient id="ID-handle" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--body)"></stop>
+          <stop offset="1" stop-color="var(--body-deep)"></stop>
+        </linearGradient>
+        <linearGradient id="ID-shine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"></stop>
+          <stop offset="1" stop-color="#ffffff" stop-opacity="0"></stop>
+        </linearGradient>
+        <pattern id="ID-bristles" width="58" height="54" patternUnits="userSpaceOnUse">
+          <g fill="var(--metal)" stroke="var(--body-deep)" stroke-opacity="0.28" stroke-width="1">
+            <rect x="-9" y="2" width="15" height="34" rx="7.5"></rect>
+            <rect x="20" y="20" width="15" height="34" rx="7.5"></rect>
+            <rect x="49" y="4" width="15" height="34" rx="7.5"></rect>
+          </g>
+        </pattern>
+        <clipPath id="ID-bristles-clip"><ellipse cx="0" cy="-118" rx="116" ry="92"></ellipse></clipPath>
+      </defs>
+      <ellipse cx="320" cy="505" rx="150" ry="28" fill="rgba(20,22,26,0.10)"></ellipse>
+      <circle cx="320" cy="330" r="222" fill="var(--tint)"></circle>
+      <circle cx="320" cy="330" r="242" fill="none" stroke="var(--body-deep)" stroke-opacity="0.16" stroke-width="2" stroke-dasharray="3 13"></circle>
+      <g transform="translate(320 320) rotate(-3)">
+        <rect x="-40" y="-14" width="80" height="254" rx="40" fill="url(#ID-handle)"></rect>
+        <rect x="-40" y="-14" width="80" height="120" fill="url(#ID-shine)" opacity="0.24"></rect>
+        <ellipse cx="0" cy="-118" rx="132" ry="108" fill="url(#ID-body)"></ellipse>
+        <ellipse cx="0" cy="-118" rx="132" ry="108" fill="none" stroke="var(--body-deep)" stroke-opacity="0.25" stroke-width="8"></ellipse>
+        <g clip-path="url(#ID-bristles-clip)">
+          <ellipse cx="0" cy="-118" rx="116" ry="92" fill="url(#ID-bristles)"></ellipse>
+        </g>
+        <ellipse cx="0" cy="-16" rx="44" ry="20" fill="var(--body-deep)" opacity="0.28"></ellipse>
+        <ellipse cx="-38" cy="-176" rx="58" ry="30" transform="rotate(-18 -38 -176)" fill="url(#ID-shine)" opacity="0.3"></ellipse>
+        <rect x="-18" y="84" width="36" height="22" rx="11" fill="var(--body-deep)" opacity="0.42"></rect>
+        <circle cx="0" cy="128" r="7" fill="var(--accent)"></circle>
+        <circle cx="0" cy="128" r="7" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="2"></circle>
+        <rect x="-12" y="220" width="24" height="10" rx="5" fill="var(--body-deep)" opacity="0.45"></rect>
+        <g stroke="var(--body-deep)" stroke-opacity="0.22" stroke-width="4" stroke-linecap="round">
+          <path d="M -20 160 h 40"></path>
+          <path d="M -14 178 h 28"></path>
+          <path d="M -20 196 h 40"></path>
+        </g>
+      </g>
+    </svg>
+  </template>
+
+  <script src="categories.js"></script>
+  <script src="flat-colors.js"></script>
+  <script src="razor-colors.js"></script>
+  <script src="cleaner-colors.js"></script>
+  <script src="irrigator-colors.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

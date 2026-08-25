@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>提交记录后台</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 28px;
+      font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      background: #f3f4f6;
+      color: #17181c;
+    }
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    h1 { margin: 0; font-size: 20px; }
+    button {
+      border: 1px solid #e6e8ec;
+      border-radius: 8px;
+      padding: 9px 14px;
+      background: #ffffff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e6e8ec;
+      border-radius: 10px;
+      overflow: auto;
+      padding: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    th, td {
+      padding: 11px 12px;
+      border-bottom: 1px solid #edf0f2;
+      text-align: left;
+    }
+    th {
+      background: #fafbfc;
+      color: #6b6f78;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+    }
+    .empty { padding: 40px; text-align: center; color: #9a9ea6; }
+    .status { font-size: 12px; color: #6b6f78; }
+  </style>
+</head>
+<body>
+  <div class="head">
+    <h1>产品配色提交记录</h1>
+    <div>
+      <span class="status" id="status"></span>
+      <button id="refresh" type="button">刷新</button>
+    </div>
+  </div>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>时间</th>
+          <th>部门</th>
+          <th>提交人</th>
+          <th>品类</th>
+          <th>产品</th>
+          <th>颜色</th>
+          <th>潘通</th>
+          <th>HEX</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="empty" id="empty">暂无提交记录</div>
+  </div>
+
+  <script>
+    const rows = document.getElementById("rows");
+    const empty = document.getElementById("empty");
+    const status = document.getElementById("status");
+
+    async function load() {
+      status.textContent = "加载中...";
+      try {
+        const response = await fetch("/api/submissions");
+        const items = await response.json();
+        rows.innerHTML = items.map((item) => `
+          <tr>
+            <td>${new Date(item.timestamp).toLocaleString("zh-CN")}</td>
+            <td>${escapeHtml(item.department)}</td>
+            <td>${escapeHtml(item.submitter)}</td>
+            <td>${escapeHtml(item.category)}</td>
+            <td>${escapeHtml(item.product)}</td>
+            <td>${escapeHtml(item.color)}</td>
+            <td>${escapeHtml(item.pantone)}</td>
+            <td>${escapeHtml(item.hex)}</td>
+          </tr>
+        `).join("");
+        empty.style.display = items.length ? "none" : "block";
+        status.textContent = `共 ${items.length} 条`;
+      } catch (error) {
+        status.textContent = "加载失败";
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[char]));
+    }
+
+    document.getElementById("refresh").addEventListener("click", load);
+    load();
+  </script>
+</body>
+</html>
