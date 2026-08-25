@@ -474,6 +474,53 @@ button {
   white-space: nowrap;
 }
 
+.multi-swatches {
+  gap: 10px;
+}
+
+.multi-swatch.selected {
+  box-shadow:
+    0 0 0 2px #ffffff,
+    0 0 0 4px var(--ink);
+}
+
+.selected-colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.selected-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba(23, 24, 28, 0.14);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(23, 24, 28, 0.08);
+}
+
+.selected-chip .chip-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #17181c;
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
 .submit-form {
   display: flex;
   flex-wrap: wrap;

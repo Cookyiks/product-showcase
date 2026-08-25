@@ -300,12 +300,15 @@ const state = {
   colorIndex: 0,
   openCategory: 0,
   selectedSub: "卷发棒",
-  placeholder: null
+  placeholder: null,
+  selectedColors: []
 };
 
 const els = {
   productList: document.getElementById("productList"),
   swatches: document.getElementById("swatches"),
+  multiSwatches: document.getElementById("multiSwatches"),
+  selectedColors: document.getElementById("selectedColors"),
   stageSwatches: document.querySelector(".stage-swatches"),
   stage: document.getElementById("stage"),
   stageVisual: document.getElementById("stageVisual"),
@@ -641,6 +644,7 @@ function renderNav() {
       const name = button.dataset.sub;
       const productId = productIdForSub(name);
       state.selectedSub = name;
+      state.selectedColors = [];
       if (productId) {
         state.productId = productId;
         state.colorIndex = 0;
@@ -669,6 +673,76 @@ function renderSwatches(product) {
     button.addEventListener("click", () => {
       state.colorIndex = Number(button.dataset.index);
       render();
+    });
+  });
+}
+
+function textColorFor(hex) {
+  const value = hex.replace("#", "");
+  const r = parseInt(value.slice(0, 2), 16);
+  const g = parseInt(value.slice(2, 4), 16);
+  const b = parseInt(value.slice(4, 6), 16);
+  return r * 0.299 + g * 0.587 + b * 0.114 > 170 ? "#17181c" : "#ffffff";
+}
+
+function renderMultiSwatches(product) {
+  els.multiSwatches.innerHTML = product.colors.map((color, index) => {
+    const selected = state.selectedColors.some((item) => item.name === color.name);
+    return `
+      <button
+        class="swatch multi-swatch${selected ? " selected" : ""}"
+        type="button"
+        style="--swatch: ${color.chip}"
+        data-color-index="${index}"
+        aria-label="${color.name}"
+        title="${color.name}"
+      ></button>
+    `;
+  }).join("");
+
+  els.multiSwatches.querySelectorAll(".multi-swatch").forEach((button) => {
+    button.addEventListener("click", () => {
+      const currentProduct = getProduct();
+      const color = currentProduct.colors[Number(button.dataset.colorIndex)];
+      const existing = state.selectedColors.findIndex((item) => item.name === color.name);
+      if (existing >= 0) {
+        state.selectedColors.splice(existing, 1);
+      } else {
+        state.selectedColors.push({
+          name: color.name,
+          hex: color.hexCode || color.body,
+          pantone: color.pantone || ""
+        });
+      }
+      renderMultiSwatches(currentProduct);
+      renderSelectedColors();
+    });
+  });
+}
+
+function renderSelectedColors() {
+  els.selectedColors.innerHTML = state.selectedColors.map((item, index) => {
+    const textColor = textColorFor(item.hex);
+    return `
+      <span class="selected-chip" style="background: ${item.hex}; color: ${textColor}">
+        <span>${item.name}</span>
+        <button
+          class="chip-remove"
+          type="button"
+          data-color-index="${index}"
+          aria-label="移除${item.name}"
+          title="移除${item.name}"
+        >&times;</button>
+      </span>
+    `;
+  }).join("");
+
+  els.selectedColors.querySelectorAll(".chip-remove").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.selectedColors.splice(Number(button.dataset.colorIndex), 1);
+      renderSelectedColors();
+      const currentProduct = getProduct();
+      if (currentProduct) renderMultiSwatches(currentProduct);
     });
   });
 }
@@ -764,6 +838,8 @@ function render() {
   const product = getProduct();
   const color = getColor();
   renderSwatches(product);
+  renderMultiSwatches(product);
+  renderSelectedColors();
   renderStage(product, color);
 }
 
@@ -800,15 +876,18 @@ els.submitForm.addEventListener("submit", async (event) => {
 
   const product = getProduct();
   const color = getColor();
+  const selected = state.selectedColors.length
+    ? state.selectedColors
+    : (color ? [{ name: color.name, hex: color.hexCode || color.body, pantone: color.pantone || "" }] : []);
   const payload = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     department,
     submitter,
     category: state.selectedSub || (product && product.name) || "",
     product: product ? product.name : state.selectedSub || "",
-    color: color ? color.name : "",
-    pantone: color ? color.pantone || "" : "",
-    hex: color ? color.hexCode || color.body || "" : "",
+    color: selected.map((item) => item.name).join("、"),
+    pantone: selected.map((item) => item.pantone).join("、"),
+    hex: selected.map((item) => item.hex).join("、"),
     timestamp: new Date().toISOString()
   };
 
