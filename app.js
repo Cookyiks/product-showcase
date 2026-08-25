@@ -801,6 +801,7 @@ els.submitForm.addEventListener("submit", async (event) => {
   const product = getProduct();
   const color = getColor();
   const payload = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     department,
     submitter,
     category: state.selectedSub || (product && product.name) || "",
